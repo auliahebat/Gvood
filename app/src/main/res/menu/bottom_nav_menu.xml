@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/round_home_24"
+        android:id="@+id/home"/>
+<!--    <item android:title="Favorite"-->
+<!--        android:icon="@drawable/baseline_favorite_24"-->
+<!--        android:id="@+id/favorite"/>-->
+    <item android:title="Add Post"
+        android:icon="@drawable/round_post_add_24"
+        android:id="@+id/post"/>
+<!--    <item android:title="History"-->
+<!--        android:icon="@drawable/round_history_24"-->
+<!--        android:id="@+id/history"/>-->
+    <item android:title="Account"
+        android:icon="@drawable/baseline_person_24"
+        android:id="@+id/account"/>
+</menu>
