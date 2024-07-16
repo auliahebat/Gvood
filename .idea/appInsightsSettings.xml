@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.aulicious.gvood" />
+                  <option name="mobileSdkAppId" value="1:653615631187:android:eac92a761cec7b0998afa6" />
+                  <option name="projectId" value="gvood-6157d" />
+                  <option name="projectNumber" value="653615631187" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "653615631187",
+    "firebase_url": "https://gvood-6157d-default-rtdb.firebaseio.com",
+    "project_id": "gvood-6157d",
+    "storage_bucket": "gvood-6157d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653615631187:android:eac92a761cec7b0998afa6",
+        "android_client_info": {
+          "package_name": "com.aulicious.gvood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "653615631187-dr1b241sf15b8k88mtq41e3rb54hsht8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlIuB_tAn3SlYgnLOe4aXN0Dap8yn6BYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "653615631187-dr1b241sf15b8k88mtq41e3rb54hsht8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
