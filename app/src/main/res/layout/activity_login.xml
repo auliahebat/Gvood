@@ -35,45 +35,42 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
 
+
             <EditText
+                android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:id="@+id/username"
-
+                android:layout_marginTop="40dp"
                 android:drawableLeft="@drawable/baseline_person_24"
                 android:drawablePadding="8dp"
                 android:hint="Username"
-                android:textColorHint="@color/black"
                 android:padding="8dp"
                 android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background"
-                android:layout_marginTop="40dp"/>
-
+                android:textColorHighlight="@color/cardview_dark_background" />
 
             <EditText
+                android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:id="@+id/password"
+                android:layout_marginTop="20dp"
                 android:drawableLeft="@drawable/round_lock_24"
                 android:drawablePadding="8dp"
                 android:hint="Password"
-                android:textColorHint="@color/black"
-                android:padding="8dp"
                 android:inputType="textPassword"
+                android:padding="8dp"
                 android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background"
-                android:layout_marginTop="20dp"/>
+                android:textColorHighlight="@color/cardview_dark_background" />
 
             <Button
+                android:id="@+id/loginButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/loginButton"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="@color/primary"
                 android:text="Login"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:layout_marginTop="30dp"
-                android:backgroundTint="@color/primary"
-                app:cornerRadius="20dp"/>
+                app:cornerRadius="20dp" />
 
         </LinearLayout>
 
