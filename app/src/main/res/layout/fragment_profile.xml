@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".ProfileFragment">
 
     <!-- Profile Picture -->
-    <ImageButton
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:layout_width="105dp"
-        android:layout_height="102dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/circle_background"
-        android:clipToOutline="true"
-        android:scaleType="centerCrop"
-         />
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:layout_marginTop="72dp"
+        app:civ_border_color="@color/gray"
+        app:civ_border_width="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.3" />
 
     <!-- Username -->
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/username_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/profile_image"
         android:layout_marginTop="18dp"
-        android:layout_centerHorizontal="true">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_image">
 
         <TextView
             android:id="@+id/profile_username"
@@ -32,148 +39,134 @@
             android:text="Username"
             android:textSize="18sp"
             android:textStyle="bold" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageButton
-            android:id="@+id/edit_username"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/profile_username"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/round_edit_24" />
-    </RelativeLayout>
+    <!-- Edit Username Button -->
+    <ImageButton
+        android:id="@+id/edit_username"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/round_edit_24"
+        app:layout_constraintBottom_toBottomOf="@id/username_container"
+        app:layout_constraintStart_toEndOf="@id/username_container"
+        app:layout_constraintTop_toTopOf="@id/username_container" />
+
     <!-- Email -->
-
-
-
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/email_container"
         android:layout_width="match_parent"
-        android:layout_height="86dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="184dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username_container">
 
         <!-- Top Border -->
         <View
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Bottom Border -->
         <View
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="31dp"
-            android:layout_marginBottom="31dp"
-            android:src="@drawable/round_email_24" />
+            android:layout_marginStart="16dp"
+            android:src="@drawable/round_email_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/profile_email"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginStart="16dp"
             android:text="rusdi@yahoo.com"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/edit_email"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="274dp"
-            android:layout_marginTop="31dp"
-            android:layout_marginEnd="42dp"
-            android:layout_marginBottom="31dp"
-            android:layout_toEndOf="@+id/imageView"
-            android:src="@drawable/round_edit_24" />
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <!-- Phone Number -->
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/phone_container"
-        android:layout_width="395dp"
-        android:layout_height="86dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="311dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email_container">
 
         <!-- Top Border -->
         <View
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Bottom Border -->
         <View
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="31dp"
-            android:layout_marginBottom="31dp"
-            android:src="@drawable/baseline_whatsapp_24" />
+            android:layout_marginStart="16dp"
+            android:src="@drawable/baseline_whatsapp_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/profile_phone"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginStart="16dp"
             android:text="+6285156733248"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageView2"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/edit_phone"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="274dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="42dp"
-            android:layout_marginBottom="30dp"
-            android:layout_toEndOf="@+id/imageView2"
-            android:src="@drawable/round_edit_24" />
-    </RelativeLayout>
-</RelativeLayout>
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/round_edit_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
