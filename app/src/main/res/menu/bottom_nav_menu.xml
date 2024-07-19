@@ -8,7 +8,7 @@
 <!--        android:icon="@drawable/baseline_favorite_24"-->
 <!--        android:id="@+id/favorite"/>-->
     <item android:title="Add Post"
-        android:icon="@drawable/round_post_add_24"
+        android:icon="@drawable/baseline_add_circle_outline_32"
         android:id="@+id/post"/>
 <!--    <item android:title="History"-->
 <!--        android:icon="@drawable/round_history_24"-->
