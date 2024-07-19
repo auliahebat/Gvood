@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage)
     implementation(libs.glide)
+    implementation(libs.recyclerview)
     annotationProcessor(libs.glide.compiler)
     implementation(libs.circleimageview) // Tambahkan ini
     testImplementation(libs.junit)

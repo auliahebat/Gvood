@@ -1,66 +1,42 @@
 package com.aulicious.gvood;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PostFragment extends Fragment {
 
-    private static final int PICK_IMAGE_REQUEST = 1;
-
-    private EditText titleEditText;
-    private EditText descriptionEditText;
-    private EditText quantityEditText;
-    private EditText cityEditText;
-    private EditText addressEditText;
-    private ImageView itemPhotoImageView;
-    private Button submitButton;
-    private ImageButton ImageButton;
-
-    private Uri imageUri;
-    private DatabaseReference databaseReference;
-    private StorageReference storageReference;
-    private FirebaseAuth mAuth;
+    private RecyclerView recyclerView;
+    private PostAdapter postAdapter;
+    private List<AddPostActivity.Post> postList;
+    private DatabaseReference postsReference;
+    private String currentUserId;
 
     public PostFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Initialize Firebase Database, Storage, and Auth references
-        databaseReference = FirebaseDatabase.getInstance().getReference("posts");
-        storageReference = FirebaseStorage.getInstance().getReference("images");
-        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -69,142 +45,107 @@ public class PostFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post, container, false);
 
-        // Initialize UI elements
-        titleEditText = view.findViewById(R.id.title);
-        descriptionEditText = view.findViewById(R.id.description);
-        quantityEditText = view.findViewById(R.id.quantity);
-        cityEditText = view.findViewById(R.id.city);
-        addressEditText = view.findViewById(R.id.address);
-        submitButton = view.findViewById(R.id.submit_button);
-        itemPhotoImageView = view.findViewById(R.id.item_photo);
-        ImageButton = view.findViewById(R.id.item_photo); // Change to photo_container
+        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Set onClickListener for the photo container to open the image chooser
-        ImageButton.setOnClickListener(v -> openFileChooser());
+        postList = new ArrayList<>();
+        postAdapter = new PostAdapter(postList, getContext());
+        recyclerView.setAdapter(postAdapter);
 
-        // Set onClickListener for the submit button
-        submitButton.setOnClickListener(v -> submitPost());
+        // Get the current user ID
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        postsReference = FirebaseDatabase.getInstance().getReference("posts");
+
+        // Fetch posts for the current user
+        fetchPostsForCurrentUser();
+
+        // Set up FloatingActionButton
+        FloatingActionButton fabAddPost = view.findViewById(R.id.fab_add_post);
+        fabAddPost.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), AddPostActivity.class);
+            startActivity(intent);
+        });
 
         return view;
     }
 
-    private void openFileChooser() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    private void fetchPostsForCurrentUser() {
+        postsReference.orderByChild("userId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postList.clear();
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    AddPostActivity.Post post = postSnapshot.getValue(AddPostActivity.Post.class);
+                    if (post != null) {
+                        postList.add(post);
+                    }
+                }
+                postAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Failed to load posts", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
-                itemPhotoImageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
+    // PostAdapter class
+    private static class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
+
+        private final List<AddPostActivity.Post> postList;
+        private final Context context;
+
+        public PostAdapter(List<AddPostActivity.Post> postList, Context context) {
+            this.postList = postList;
+            this.context = context;
+        }
+
+        @NonNull
+        @Override
+        public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+            return new PostViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
+            AddPostActivity.Post post = postList.get(position);
+            holder.titleTextView.setText(post.title);
+            holder.userTextView.setText(post.userId); // Ideally, fetch the user name based on the userId
+            holder.cityTextView.setText(post.city);
+            Glide.with(holder.itemView.getContext()).load(post.imageUrl).into(holder.postImageView);
+
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, PostDetailActivity.class);
+                intent.putExtra("imageUrl", post.imageUrl);
+                intent.putExtra("title", post.title);
+                intent.putExtra("user", post.userId);
+                intent.putExtra("city", post.city);
+                intent.putExtra("description", post.description);
+                context.startActivity(intent);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return postList.size();
+        }
+
+        public static class PostViewHolder extends RecyclerView.ViewHolder {
+            public ImageView postImageView;
+            public TextView titleTextView;
+            public TextView userTextView;
+            public TextView cityTextView;
+
+            public PostViewHolder(@NonNull View itemView) {
+                super(itemView);
+                postImageView = itemView.findViewById(R.id.post_image);
+                titleTextView = itemView.findViewById(R.id.post_title);
+                userTextView = itemView.findViewById(R.id.post_user);
+                cityTextView = itemView.findViewById(R.id.post_city);
             }
         }
     }
-
-    private void submitPost() {
-        // Get data from EditText fields
-        String title = titleEditText.getText().toString().trim();
-        String description = descriptionEditText.getText().toString().trim();
-        String quantity = quantityEditText.getText().toString().trim();
-        String city = cityEditText.getText().toString().trim();
-        String address = addressEditText.getText().toString().trim();
-
-        // Validate input
-        if (title.isEmpty() || description.isEmpty() || quantity.isEmpty() ||
-                city.isEmpty() || address.isEmpty()) {
-            Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Check if image is selected
-        if (imageUri == null) {
-            Toast.makeText(getActivity(), "Please select an image", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Get current user ID
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user == null) {
-            Toast.makeText(getActivity(), "User not authenticated", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String userId = user.getUid();
-
-        // Upload image to Firebase Storage
-        final StorageReference fileReference = storageReference.child(UUID.randomUUID().toString() + ".jpg");
-
-        fileReference.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> fileReference.getDownloadUrl()
-                        .addOnSuccessListener(uri -> {
-                            String imageUrl = uri.toString();
-                            savePostToDatabase(title, description, quantity, city, address, imageUrl, userId);
-                        }))
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getActivity(), "Failed to upload image", Toast.LENGTH_SHORT).show();
-                    Log.e("Upload Error", e.getMessage());
-                });
-    }
-
-    private void savePostToDatabase(String title, String description, String quantity, String city, String address, String imageUrl, String userId) {
-        // Generate unique ID for the post
-        String postId = databaseReference.push().getKey();
-
-        // Create a Post object
-        Post post = new Post(title, description, quantity, city, address, imageUrl, userId);
-
-        // Save post to Firebase Realtime Database
-        if (postId != null) {
-            databaseReference.child(postId).setValue(post)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Post submitted successfully", Toast.LENGTH_SHORT).show();
-                            clearForm();
-                        } else {
-                            Toast.makeText(getActivity(), "Failed to submit post", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
-    }
-
-    private void clearForm() {
-        titleEditText.setText("");
-        descriptionEditText.setText("");
-        quantityEditText.setText("");
-        cityEditText.setText("");
-        addressEditText.setText("");
-        itemPhotoImageView.setImageResource(R.drawable.baseline_camera_alt_24); // reset to default image
-        imageUri = null;
-    }
-
-    // Post class to structure the data
-    public static class Post {
-        public String title;
-        public String description;
-        public String quantity;
-        public String city;
-        public String address;
-        public String imageUrl;
-        public String userId;
-
-        public Post() {
-            // Default constructor required for calls to DataSnapshot.getValue(Post.class)
-        }
-
-        public Post(String title, String description, String quantity, String city, String address, String imageUrl, String userId) {
-            this.title = title;
-            this.description = description;
-            this.quantity = quantity;
-            this.city = city;
-            this.address = address;
-            this.imageUrl = imageUrl;
-            this.userId = userId;
-        }
-    }
 }
-
