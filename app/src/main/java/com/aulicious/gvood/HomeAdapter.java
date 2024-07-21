@@ -17,13 +17,13 @@ import com.aulicious.gvood.HomeFragment.Post;
 import java.util.List;
 import java.util.Map;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.PostViewHolder> {
 
     private final List<Post> postList;
     private final Map<String, String> userIdToUsernameMap;
     private final Context context;
 
-    public PostAdapter(List<Post> postList, Map<String, String> userIdToUsernameMap, Context context) {
+    public HomeAdapter(List<Post> postList, Map<String, String> userIdToUsernameMap, Context context) {
         this.postList = postList;
         this.userIdToUsernameMap = userIdToUsernameMap;
         this.context = context;
@@ -32,7 +32,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home, parent, false);
         return new PostViewHolder(view);
     }
 

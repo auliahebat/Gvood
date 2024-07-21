@@ -3,9 +3,11 @@ package com.aulicious.gvood;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +33,7 @@ public class PostFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private PostAdapter postAdapter;
-    private List<AddPostActivity.Post> postList;
+    private List<Post> postList;
     private DatabaseReference postsReference;
     private String currentUserId;
 
@@ -76,7 +78,7 @@ public class PostFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 postList.clear();
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    AddPostActivity.Post post = postSnapshot.getValue(AddPostActivity.Post.class);
+                    Post post = postSnapshot.getValue(Post.class);
                     if (post != null) {
                         postList.add(post);
                     }
@@ -94,10 +96,10 @@ public class PostFragment extends Fragment {
     // PostAdapter class
     private static class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
 
-        private final List<AddPostActivity.Post> postList;
+        private final List<Post> postList;
         private final Context context;
 
-        public PostAdapter(List<AddPostActivity.Post> postList, Context context) {
+        public PostAdapter(List<Post> postList, Context context) {
             this.postList = postList;
             this.context = context;
         }
@@ -111,11 +113,16 @@ public class PostFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-            AddPostActivity.Post post = postList.get(position);
+            Post post = postList.get(position);
             holder.titleTextView.setText(post.title);
             holder.userTextView.setText(post.userId); // Ideally, fetch the user name based on the userId
             holder.cityTextView.setText(post.city);
             Glide.with(holder.itemView.getContext()).load(post.imageUrl).into(holder.postImageView);
+
+            holder.deleteButton.setOnClickListener(v -> {
+                // Handle delete button click
+                deletePost(post.postId, position);
+            });
 
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(context, PostDetailActivity.class);
@@ -128,6 +135,24 @@ public class PostFragment extends Fragment {
             });
         }
 
+        private void deletePost(String postId, int position) {
+            Log.d("PostFragment", "Attempting to delete post at position: " + position + ", list size: " + postList.size());
+            if (position >= 0 && position < postList.size()) {
+                DatabaseReference postRef = FirebaseDatabase.getInstance().getReference("posts").child(postId);
+                postRef.removeValue().addOnSuccessListener(aVoid -> {
+                    postList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, postList.size());
+                    Toast.makeText(context, "Post deleted successfully", Toast.LENGTH_SHORT).show();
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(context, "Failed to delete post", Toast.LENGTH_SHORT).show();
+                });
+            } else {
+                Toast.makeText(context, "Post position is invalid", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
         @Override
         public int getItemCount() {
             return postList.size();
@@ -138,6 +163,7 @@ public class PostFragment extends Fragment {
             public TextView titleTextView;
             public TextView userTextView;
             public TextView cityTextView;
+            public ImageButton deleteButton;
 
             public PostViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -145,6 +171,7 @@ public class PostFragment extends Fragment {
                 titleTextView = itemView.findViewById(R.id.post_title);
                 userTextView = itemView.findViewById(R.id.post_user);
                 cityTextView = itemView.findViewById(R.id.post_city);
+                deleteButton = itemView.findViewById(R.id.delete_button);
             }
         }
     }

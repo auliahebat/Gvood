@@ -27,7 +27,7 @@ import java.util.Map;
 public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private PostAdapter postAdapter;
+    private HomeAdapter homeAdapter;
     private List<Post> postList;
     private DatabaseReference postsReference;
     private DatabaseReference usersReference;
@@ -48,8 +48,8 @@ public class HomeFragment extends Fragment {
 
         postList = new ArrayList<>();
         userIdToUsernameMap = new HashMap<>();
-        postAdapter = new PostAdapter(postList, userIdToUsernameMap, getContext());
-        recyclerView.setAdapter(postAdapter);
+        homeAdapter = new HomeAdapter(postList, userIdToUsernameMap, getContext());
+        recyclerView.setAdapter(homeAdapter);
 
         postsReference = FirebaseDatabase.getInstance().getReference("posts");
         usersReference = FirebaseDatabase.getInstance().getReference("users");
@@ -85,7 +85,7 @@ public class HomeFragment extends Fragment {
                     Post post = postSnapshot.getValue(Post.class);
                     postList.add(post);
                 }
-                postAdapter.notifyDataSetChanged();
+                homeAdapter.notifyDataSetChanged();
             }
 
             @Override

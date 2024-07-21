@@ -32,6 +32,7 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".PostDetailActivity"/>
+        <activity android:name=".AddPostActivity"/>
     </application>
 
 </manifest>

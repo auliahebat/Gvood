@@ -145,7 +145,7 @@ public class AddPostActivity extends AppCompatActivity {
         String postId = databaseReference.push().getKey();
 
         // Create a Post object
-        Post post = new Post(title, description, quantity, city, address, imageUrl, userId);
+        Post post = new Post(postId,title, description, quantity, city, address, imageUrl, userId);
 
         // Save post to Firebase Realtime Database
         if (postId != null) {
@@ -171,28 +171,6 @@ public class AddPostActivity extends AppCompatActivity {
         imageUri = null;
     }
 
-    // Post class to structure the data
-    public static class Post {
-        public String title;
-        public String description;
-        public String quantity;
-        public String city;
-        public String address;
-        public String imageUrl;
-        public String userId;
 
-        public Post() {
-            // Default constructor required for calls to DataSnapshot.getValue(Post.class)
-        }
 
-        public Post(String title, String description, String quantity, String city, String address, String imageUrl, String userId) {
-            this.title = title;
-            this.description = description;
-            this.quantity = quantity;
-            this.city = city;
-            this.address = address;
-            this.imageUrl = imageUrl;
-            this.userId = userId;
-        }
-    }
 }
