@@ -53,6 +53,14 @@
                 android:layout_marginTop="4dp"
                 android:textSize="14sp"
                 android:textColor="@color/black" />
+
+            <!-- TextView untuk menampilkan postId -->
+            <TextView
+                android:id="@+id/post_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+            android:textColor="@color/black" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

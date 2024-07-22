@@ -32,7 +32,7 @@ import java.util.List;
 public class PostFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private PostAdapter postAdapter;
+    private static PostAdapter postAdapter;
     private List<Post> postList;
     private DatabaseReference postsReference;
     private String currentUserId;
@@ -124,15 +124,16 @@ public class PostFragment extends Fragment {
                 deletePost(post.postId, position);
             });
 
-            holder.itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(context, PostDetailActivity.class);
-                intent.putExtra("imageUrl", post.imageUrl);
-                intent.putExtra("title", post.title);
-                intent.putExtra("user", post.userId);
-                intent.putExtra("city", post.city);
-                intent.putExtra("description", post.description);
-                context.startActivity(intent);
-            });
+            // Remove or comment out the OnClickListener to make the card not clickable
+            // holder.itemView.setOnClickListener(v -> {
+            //     Intent intent = new Intent(context, PostDetailActivity.class);
+            //     intent.putExtra("imageUrl", post.imageUrl);
+            //     intent.putExtra("title", post.title);
+            //     intent.putExtra("user", post.userId);
+            //     intent.putExtra("city", post.city);
+            //     intent.putExtra("description", post.description);
+            //     context.startActivity(intent);
+            // });
         }
 
         private void deletePost(String postId, int position) {
@@ -141,8 +142,8 @@ public class PostFragment extends Fragment {
                 DatabaseReference postRef = FirebaseDatabase.getInstance().getReference("posts").child(postId);
                 postRef.removeValue().addOnSuccessListener(aVoid -> {
                     postList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, postList.size());
+                    // Clear the entire list and notify dataset change to prevent index issues
+                    postAdapter.notifyDataSetChanged();
                     Toast.makeText(context, "Post deleted successfully", Toast.LENGTH_SHORT).show();
                 }).addOnFailureListener(e -> {
                     Toast.makeText(context, "Failed to delete post", Toast.LENGTH_SHORT).show();
@@ -151,7 +152,6 @@ public class PostFragment extends Fragment {
                 Toast.makeText(context, "Post position is invalid", Toast.LENGTH_SHORT).show();
             }
         }
-
 
         @Override
         public int getItemCount() {

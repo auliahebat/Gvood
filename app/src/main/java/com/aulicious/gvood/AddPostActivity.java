@@ -6,16 +6,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -53,7 +50,7 @@ public class AddPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_post); // Use your actual layout name
+        setContentView(R.layout.activity_add_post);
 
         // Initialize Firebase Database, Storage, and Auth references
         databaseReference = FirebaseDatabase.getInstance().getReference("posts");
@@ -68,7 +65,7 @@ public class AddPostActivity extends AppCompatActivity {
         addressEditText = findViewById(R.id.address);
         submitButton = findViewById(R.id.submit_button);
         itemPhotoImageView = findViewById(R.id.item_photo);
-        selectImageButton = findViewById(R.id.item_photo); // Change to photo_container
+        selectImageButton = findViewById(R.id.item_photo);
 
         // Set onClickListener for the photo container to open the image chooser
         selectImageButton.setOnClickListener(v -> openFileChooser());
@@ -145,7 +142,7 @@ public class AddPostActivity extends AppCompatActivity {
         String postId = databaseReference.push().getKey();
 
         // Create a Post object
-        Post post = new Post(postId,title, description, quantity, city, address, imageUrl, userId);
+        Post post = new Post(postId, title, description, quantity, city, address, imageUrl, userId);
 
         // Save post to Firebase Realtime Database
         if (postId != null) {
@@ -170,7 +167,4 @@ public class AddPostActivity extends AppCompatActivity {
         itemPhotoImageView.setImageResource(R.drawable.baseline_camera_alt_24); // reset to default image
         imageUri = null;
     }
-
-
-
 }

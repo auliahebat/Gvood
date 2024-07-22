@@ -97,6 +97,7 @@ public class HomeFragment extends Fragment {
 
     // Post class should be the same as defined in PostFragment
     public static class Post {
+        public String postId;
         public String title;
         public String description;
         public String quantity;
@@ -109,7 +110,7 @@ public class HomeFragment extends Fragment {
             // Default constructor required for calls to DataSnapshot.getValue(Post.class)
         }
 
-        public Post(String title, String description, String quantity, String city, String address, String imageUrl, String userId) {
+        public Post(String postId, String title, String description, String quantity, String city, String address, String imageUrl, String userId) {
             this.title = title;
             this.description = description;
             this.quantity = quantity;

@@ -46,6 +46,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.PostViewHolder
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, PostDetailActivity.class);
+            intent.putExtra("postId", post.postId); // Send postId to PostDetailActivity
             intent.putExtra("imageUrl", post.imageUrl);
             intent.putExtra("title", post.title);
             intent.putExtra("user", userIdToUsernameMap.get(post.userId));

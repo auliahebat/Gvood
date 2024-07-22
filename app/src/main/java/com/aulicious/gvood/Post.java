@@ -10,8 +10,8 @@ public class Post {
     public String imageUrl;
     public String userId;
 
+    // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     public Post() {
-        // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
     public Post(String postId, String title, String description, String quantity, String city, String address, String imageUrl, String userId) {
